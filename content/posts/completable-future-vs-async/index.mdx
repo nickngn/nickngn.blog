@@ -1,0 +1,20 @@
+---
+title: How to use CompletableFuture vs @Async
+date: 2023-04-25
+tags:
+  - Spring Boot
+  - Async Processing
+---
+
+CompletableFuture & @Async are often used for asynchronous processing purpose, this maybe the
+biggest similarity and questionable confusion when people think about selection.
+
+However, they are used differently:
+- CompletableFuture is used mostly with chained methods and callbacks.
+- @Async is used in application as the same way with other method calls, but CgLib made the
+magic to wrap the object marked with @Async, and run it on another thread.
+
+So that, deciding carefully what you want bases on:
+- Is this method always processed asynchronously? If yes, feel free to mark @Async on it (better to impl method if there is also interface)
+or else you know you should choose the other way.
+- Do we have callbacks to handle after the main process finished?

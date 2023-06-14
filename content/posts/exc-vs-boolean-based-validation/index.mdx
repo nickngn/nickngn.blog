@@ -1,0 +1,120 @@
+---
+title: Exception based & Boolean based validation
+date: 2023-04-25
+categories:
+- Java Validation
+- Exception handling
+---
+
+## What is exception based validation?
+
+```java
+class SyntaxValidator {
+
+    public void validate(String value) {
+        try {
+            checkSyntaxA(value);
+            // others
+        } catch (SyntaxException e) {
+            // handle exception e
+        }
+    }
+
+    private void checkSyntaxA(String value) {
+        if (value == null) throw new SyntaxException(INPUT_NOT_NULL);
+        // other logic checks
+    }
+}
+```
+Exception based validation is methodology to throw exception each time the happy case condition isn't met.
+It relies on higher level caller to know and handle it for them.
+
+In the real life. it's like: the travel agent asks you to fill the form, and when you fill something incorrectly, you
+tell the agent about that, so that the agent can handle it for you.
+
+## What is boolean based validation?
+```java
+class SyntaxValidator {
+
+    public void validate(String value) {
+        if (!checkSyntaxA(value)) {
+            // do something
+        };
+        // others
+    }
+
+    private boolean checkSyntaxA(String value) {
+        if (value == null) return false;
+        // other logic checks
+    }
+}
+```
+
+Boolean based validation is methodology to return boolean: true if all checks in method is valid, and vice versus.
+
+## How to use?
+
+|                          | Exception-based                       | Boolean-based                                                |
+|--------------------------|---------------------------------------|--------------------------------------------------------------|
+| When caller know result? | Immediately when the condition failed | Controllable to return immediately or in the end of function |
+| Performance              | Lower slightly                        | Higher slightly                                              |
+| Readability              | Well-through                          | Multiple if-else continuously                                |
+
+### When to use?
+
+It is normally suggested to not use Exception based validation commonly in your code, instead of it, it's better to use
+boolean-based solution because it's safer to use commonly and work correctly in all areas of your project.
+Although you have to pay with a bit of readability but the conditions are easy to modify.
+
+On the other hand, exception-based solution can enhance the flow and shorten code, but if you don't wrap method carefully
+then the container class will be a mess.
+
+However, everything has its correct way for its correct moment, I do believe in that. <br/>
+As my experiment, Exception-based is
+good to use when you need a big validation module (a validator class / a package for validating), so that you can have a
+natural wrapper (class/package) and there is only limited number of ports (public validation methods), that mean except
+allowed ports, you have to set all modifiers for others to be default or private.
+
+## Extension: Notification based
+The idea to wrap the error detail in the object and return.
+
+```java
+import java.util.ArrayList;
+import java.util.Arrays;
+
+class ValidationResult {
+    private final List<String> errorList = new ArrayList<>();
+
+    public void addErrors(String... errors) {
+        errorList.addAll(Arrays.asList(errors));
+    }
+    public void addErrors(ValidationResult result) {
+        errorList.addAll(result.errorList);
+    }
+
+    public boolean hasErrors() { return !errorList.isEmpty(); }
+}
+```
+
+And how to use it:
+```java
+class SyntaxValidator {
+
+    public void validate(String value) {
+        if (checkSyntaxA(value).hasErrors()) {
+            // do something
+        };
+        // others
+    }
+
+    private boolean checkSyntaxA(String value) {
+        ValidationResult result = new ValidationResult();
+        if (value == null) result.addErrors(INPUT_NOT_NULL);
+        // other logic checks
+        return result;
+    }
+}
+```
+
+## Reference
+[Refactoring Ugly exception based with Notifications](https://martinfowler.com/articles/replaceThrowWithNotification.html)
