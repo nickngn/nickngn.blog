@@ -1,0 +1,65 @@
+---
+title: 5WH questions about automation testing
+date: 2023-06-14
+description: Short but comprehensive answers for automation testing in general
+tags:
+  - unit-test
+  - basic
+---
+
+## 1. WHY?
+
+- Because we don't want to test all features again everytime making changes to source code.
+- Because we want to draw a safe circle before changing something to related source code (fix bugs/add features) so that
+  we know we don't go over that.
+
+## 2. WHAT?
+
+### 2.1 What is automation testing?
+`Who want do the same actions after changing every each line of code?`
+
+You don't, I don't, so leave it to the machine, the machine is fast and reliable if we guide it well.
+
+That's it, the automation testing is a list of guidance - each of them is for checking correctness of one requirement for our code/business.
+
+However, depend on the scope then you can choose which type of automation tests. There are:
+
+1. **Unit test**: for `a piece of code`, sounds not cleared, right? - Yes, because there is no definition for scope of unit test,
+it can be a method, a class, a component or a feature. However, you can understand implicitly when people talk about Unit test:
+
+    > Unit tests are test cases which are not related to network interactions.
+    Eg: Test cases handle request from Client (HTTP) or query to database (JDBC)
+
+    More examples in [Unit test with Spring Boot](/unit-test-with-spring-boot)
+
+2. **Integration test**: As addition for unit test, integration test is for test cases need interactions from outside of application
+    or between components.
+
+    For example: we want to test if user send request with not existed URL to server, then server have to respond user the error 404.
+
+    So why isn't this case unit test? Because sending an HTTP request often requires framework and system process, which aren't under
+    control and can encounter unexpected errors.
+
+    More examples in [Integration test with Spring Boot](/integration-test-with-spring-boot)
+
+3. **System test**: While Integration test is for simple operation test cases, then System test have more than that. You can test
+    with multiple running services/applications at once to test an operation flow (like a feature).
+
+    For example: To test a flow of buying product operation, normally it needs: stock service, payment service, authentication service
+
+4. **End-to-end**: To test multiple features as individual users, it needs likely all services running for the big system, as well as
+    third-party system.
+
+    For example: Payment with credit card needs: Merchant system, Visa system, Notification system, Bank's system, etc.
+
+## 3. WHEN?
+
+### 3.1 Refactoring?
+
+### 3.2 Developing?
+
+### 3.3 Fixing bugs?
+
+## 4. WHERE?
+
+## 5. HOW?
