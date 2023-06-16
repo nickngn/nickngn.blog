@@ -9,57 +9,113 @@ tags:
 
 ## 1. WHY?
 
-- Because we don't want to test all features again everytime making changes to source code.
+- Because we don't want to test all features again every time making changes to the source code.
 - Because we want to draw a safe circle before changing something to related source code (fix bugs/add features) so that
-  we know we don't go over that.
+we know we don't go over that.
 
 ## 2. WHAT?
 
 ### 2.1 What is automation testing?
-`Who want do the same actions after changing every each line of code?`
+`Who wants to do the same actions after changing every each line of code?`
 
 You don't, I don't, so leave it to the machine, the machine is fast and reliable if we guide it well.
 
-That's it, the automation testing is a list of guidance - each of them is for checking correctness of one requirement for our code/business.
+That's it, the automation testing is a list of guidance - each is for checking the correctness of one requirement for our code/business.
 
-However, depend on the scope then you can choose which type of automation tests. There are:
+However, depending on the scope, you can choose which type of automation tests. There are:
 
-1. **Unit test**: for `a piece of code`, sounds not cleared, right? - Yes, because there is no definition for scope of unit test,
-it can be a method, a class, a component or a feature. However, you can understand implicitly when people talk about Unit test:
+1. **Unit test**: for `a piece of code`, sounds not cleared, right? - Yes, because there is no definition for the scope of the unit test,
+it can be a method, a class, a component, or a feature. However, you can understand implicitly when people talk about the unit test:
 
-    > Unit tests are test cases which are not related to network interactions.
-    Eg: Test cases handle request from Client (HTTP) or query to database (JDBC)
+ > Unit tests are test cases that are not related to network interactions.
+E.g., Test cases handle requests from the Client (HTTP) or queries to the database (JDBC)
 
-    More examples in [Unit test with Spring Boot](/unit-test-with-spring-boot)
+2. **Integration test**: In addition to the unit test, the integration test is for test cases that need interactions from outside of the application
+or between components.
 
-2. **Integration test**: As addition for unit test, integration test is for test cases need interactions from outside of application
-    or between components.
+For example, we want to test if the user sends requests with no existing URL to the server, then the server has to respond using the error 404.
 
-    For example: we want to test if user send request with not existed URL to server, then server have to respond user the error 404.
+So why isn't this case unit test? Because sending an HTTP request often requires the framework and system process, which aren't under
+control and can encounter unexpected errors.
 
-    So why isn't this case unit test? Because sending an HTTP request often requires framework and system process, which aren't under
-    control and can encounter unexpected errors.
+3. **System test**: While the Integration test is for simple operation test cases, the System test has more than that. You can test
+with multiple running services/applications simultaneously to try an operation flow (like a feature).
 
-    More examples in [Integration test with Spring Boot](/integration-test-with-spring-boot)
+For example: To test a flow of buying product operation, it usually needs stock service, payment service, and authentication service.
 
-3. **System test**: While Integration test is for simple operation test cases, then System test have more than that. You can test
-    with multiple running services/applications at once to test an operation flow (like a feature).
+4. **End-to-end**: To test multiple features as individual users likely need all services running for the extensive system, as well as
+third-party system.
 
-    For example: To test a flow of buying product operation, normally it needs: stock service, payment service, authentication service
-
-4. **End-to-end**: To test multiple features as individual users, it needs likely all services running for the big system, as well as
-    third-party system.
-
-    For example: Payment with credit card needs: Merchant system, Visa system, Notification system, Bank's system, etc.
+For example, Payment with a credit card needs a Merchant system, Visa system, Notification system, Bank system, etc.
 
 ## 3. WHEN?
 
-### 3.1 Refactoring?
+With new people to automation testing, the common thinking is writing tests takes time and should be written after finishing
+with the main code. Writing tests takes time to be correct, but only writing after the main principle is often wrong.
 
-### 3.2 Developing?
+So when should we implement tests? As my experience with real work, it depends on the type of below tasks.
 
-### 3.3 Fixing bugs?
+### 3.1 Refactoring
+
+You better MUST write tests before refactoring, don't believe in yourself or anyone. To be honest, when I'm doing refactoring
+I don't believe in myself as well. This isn't not only from my experience but also from famous coders like Martin Fowler, and Uncle Bob,
+also mentioned in their books.
+
+>I strongly advise you to learn and use refactoring tools in IDE like IntelliJ, and Eclipse.
+They have awesome tools to make the work faster and, no doubt, with accuracy. Features such as Extract method, Rename,
+Inline variable, Inline fields,... - most of the refactoring techniques.
+
+### 3.2 Developing
+
+Regarding feature implementation, you can write tests after finished things, but you can also write before (Test Driven Development).
+
+### 3.3 Fixing bugs
+
+The same with refactoring, you're suggested to cover related cases with tests, it's good to reproduce bugs by failed tests
+so that when the bugs are fixed, you have the tests implemented and ensure the bug never goes back.
 
 ## 4. WHERE?
 
+This is the project structure I often use for projects:
+
+``` scss
+project-root/
+  ├── src/
+  │   ├── main/
+  │   │   ├── java/             (source code directory)
+  │   │   │   └── com/
+  │   │   │       └── example/
+  │   │   │           └── MyApp.java
+  │   │   └── resources/        (resource files directory)
+  │   │       └── application.properties
+  ├── integration/
+  │   ├── java/                 (integration test source code directory)
+  │   │   └── com/
+  │   │       └── example/
+  │   │           └── IntegrationTest.java
+  │   └── resources/            (integration test resource files directory)
+  │       └── integration.properties
+  ├── system/
+  │   ├── java/                 (system test source code directory)
+  │   │   └── com/
+  │   │       └── example/
+  │   │           └── SystemTest.java
+  │   └── resources/            (system test resource files directory)
+  │       └── system.properties
+  ├── pom.xml                   (project configuration file)
+  ├── target/                   (compiled output directory)
+  └── ...
+(Ft. ChatGPT)
+```
+
 ## 5. HOW?
+
+Please refer to the below sources for more details:
+
+[Unit test with Spring Boot](/unit-test-with-spring-boot)
+
+[Integration test with Spring Boot](/integration-test-with-spring-boot)
+
+[System test with Spring Boot](/system-test-with-spring-boot)
+
+[End-to-End test with Cypress](/e2e-test-with-cypress)
