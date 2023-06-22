@@ -50,29 +50,32 @@ For example, Payment with a credit card needs a Merchant system, Visa system, No
 
 ## 3. WHEN?
 
-With new people to automation testing, the common thinking is writing tests takes time and should be written after finishing
-with the main code. Writing tests takes time to be correct, but only writing after the main principle is often wrong.
-
-So when should we implement tests? As my experience with real work, it depends on the type of below tasks.
+When it comes to implementing tests, it's common for newcomers to think that writing tests takes time and should be done
+after completing the main code. However, this approach is often flawed.
+The timing of test implementation depends on the following tasks:
 
 ### 3.1 Refactoring
 
-You better MUST write tests before refactoring, don't believe in yourself or anyone. To be honest, when I'm doing refactoring
-I don't believe in myself as well. This isn't not only from my experience but also from famous coders like Martin Fowler, and Uncle Bob,
-also mentioned in their books.
+It is crucial to write tests before refactoring. Even experienced developers, including Martin Fowler and Uncle Bob,
+emphasize this practice.
 
->I strongly advise you to learn and use refactoring tools in IDE like IntelliJ, and Eclipse.
-They have awesome tools to make the work faster and, no doubt, with accuracy. Features such as Extract method, Rename,
+>I strongly advise you to learn and using refactoring tools, IDEs like IntelliJ
+and Eclipse tools can greatly speed up the process while ensuring accuracy. Features such as Extract method, Rename,
 Inline variable, Inline fields,... - most of the refactoring techniques.
 
 ### 3.2 Developing
 
-Regarding feature implementation, you can write tests after finished things, but you can also write before (Test Driven Development).
+For feature implementation, tests can be written either after finishing the code or even before (Test Driven Development approach).
 
 ### 3.3 Fixing bugs
 
-The same with refactoring, you're suggested to cover related cases with tests, it's good to reproduce bugs by failed tests
-so that when the bugs are fixed, you have the tests implemented and ensure the bug never goes back.
+Similar to refactoring, it is recommended to cover related cases with tests.
+Reproducing bugs through failed tests allows for confident bug fixing, ensuring that the issue does not resurface.
+
+
+
+By considering the specific tasks at hand, writing tests at the appropriate times ensures better code quality,
+prevents regressions, and supports efficient development and bug fixing processes.
 
 ## 4. WHERE?
 

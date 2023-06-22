@@ -13,7 +13,7 @@ const config: GatsbyConfig = {
     siteHeadline: `NickNgn Blog`,
     siteUrl: `http://www.nickngn.blog`,
     siteDescription: `Where I note down my knowledge and thoughts while working`,
-    siteImage: `/banner.jpg`,
+    siteImage: `/banner.png`,
     siteLanguage: `en`,
     author: `@nickngn`,
   },
