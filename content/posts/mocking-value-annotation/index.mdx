@@ -1,0 +1,75 @@
+---
+title: How to mock @Value in Spring Boot tests
+date: 2023-06-22
+description: Mock @Value values
+tags:
+  - unit-test
+  - spring-boot
+  - mocking
+  - annotation
+---
+
+![banner](https://images.unsplash.com/photo-1685345324402-460a889064d3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2370&q=80)
+
+### Dependencies
+
+``` xml title=pom.xml
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>5.1.2.RELEASE</version>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-test</artifactId>
+    <version>5.1.2.RELEASE</version>
+    <scope>test</scope>
+</dependency>
+```
+### How to mock?
+Given this code:
+
+```java withLineNumbers title=Foo.java
+@Component
+public class Foo {
+
+    @Value("${field-value}")
+    private boolean field;
+
+    public void methodThatUsesField() {
+        if (field) {
+            // something running here
+        }
+    }
+}
+```
+
+**So how do you want to mock it?**
+
+Instead of changing values in the application.properties or vice versus... We can just use `ReflectionTestUtils`:
+
+```java highlight=12 withLineNumbers  title=FooTest.java
+import org.springframework.test.util.ReflectionTestUtils;
+
+@SpringBootTest
+class FooTest {
+
+    @Autowired
+    private Foo foo;
+
+    @Test
+    void testMethodThatUsesField() {
+        // Given
+        ReflectionTestUtils.setField(Foo, "field", value);
+
+        // When
+        foo.methodThatUsesField();
+
+        // Then
+        // assertions
+    }
+}
+```
+
+Read more in [ReflectionTestUtils](https://www.baeldung.com/spring-reflection-test-utils)

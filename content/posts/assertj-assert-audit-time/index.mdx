@@ -1,0 +1,69 @@
+---
+title: Using AssertJ to assert audited timestamp
+date: 2023-06-26
+slug: /assert-audited-timestamp-with-assertj
+tags:
+  - assertj
+  - timestamp
+  - assert
+---
+
+![banner](https://images.unsplash.com/photo-1534870439272-475575042b61?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2670&q=80)
+
+Most of the applications have date time fields created at the moment the code flow run through, so that we can't
+pre-calculate the expected datetime in the Unit Tests.
+
+Given a method:
+
+``` java
+public A foo() {
+    A a = new A();
+    // do something
+    a.setCreatedDateTime(LocalDateTime.now());
+    a.setLastUpdatedDateTime(LocalDateTime.now());
+    return a;
+}
+```
+
+So how do we test the date time?
+
+``` java
+@Test
+void testFooAuditedDateTime() {
+    // Given
+
+    // When
+    A a = foo();
+
+    //Then
+    assertThat(a.getCreatedDateTime()).isEqualTo(/* something */);
+    assertThat(a.getLastUpdatedDateTime()).isEqualTo(/* something */);
+}
+```
+
+Those will be failed, of course.
+
+Actually, there is no way can we have the exactly expectation of those date time fields. Nonetheless, AssertJ provides us
+an API to deal with this case: use approximately datetime - a close moment instead, and that's enough for 99% cases.
+
+We can do it like:
+
+``` java
+@Test
+void testFooAuditedDateTime() {
+    // Given
+
+    // When
+    A a = foo();
+
+    //Then
+    assertThat(a.getCreatedDateTime()).isCloseTo(new Date(), 100);
+    assertThat(a.getLastUpdatedDateTime()).isCloseTo(new Date(), 100);
+}
+```
+
+Those assertions mean the date time initiated with value closed to the moment which are checked and not over 100 ms.
+
+Besides, AssertJ also provide plenty of other APIs for date assertions as well. See more in:
+
+[AbstractDateAssert JavaDoc](http://joel-costigliola.github.io/assertj/core-8/api/index.html)

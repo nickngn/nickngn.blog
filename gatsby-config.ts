@@ -25,6 +25,10 @@ const config: GatsbyConfig = {
       options: {
         navigation: [
           {
+            title: `Homepage`,
+            slug: `/`,
+          },
+          {
             title: `Blog`,
             slug: `/blog`,
           },
@@ -38,10 +42,10 @@ const config: GatsbyConfig = {
           //   name: `Twitter`,
           //   url: `https://twitter.com/lekoarts_de`,
           // },
-          {
-            name: `Homepage`,
-            url: `http://www.nickngn.blog`,
-          },
+          // {
+          //   name: `Homepage`,
+          //   url: `http://www.nickngn.blog`,
+          // },
         ],
       },
     },
