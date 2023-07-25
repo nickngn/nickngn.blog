@@ -44,6 +44,15 @@ jobs:
         with:
           node-version: "18"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            public
+            .cache
+          key: ${{ runner.os }}-gatsby-build-${{ hashFiles('public') }}
+          restore-keys: |
+            ${{ runner.os }}-gatsby-build-
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Gatsby
@@ -70,4 +79,6 @@ jobs:
           export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY_ID }}
           export AWS_DEFAULT_REGION=ap-southeast-1
       - name: Upload to AWS S3
-        run: aws s3 sync ./public s3://www.nickngn.blog/ --delete --region ap-southeast-1
+        run: |
+          pwd
+          aws s3 sync ./public s3://www.nickngn.blog/ --delete --region ap-southeast-1
