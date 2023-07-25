@@ -81,4 +81,4 @@ jobs:
       - name: Upload to AWS S3
         run: |
           pwd
-          aws s3 sync ./public s3://www.nickngn.blog/ --delete --region ap-southeast-1
+          aws s3 sync . s3://www.nickngn.blog/ --delete --region ap-southeast-1
