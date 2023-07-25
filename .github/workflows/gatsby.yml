@@ -66,4 +66,4 @@ jobs:
           export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_ACCESS_KEY_ID }}
           export AWS_DEFAULT_REGION=ap-southeast-1
       - name: Upload to AWS S3
-        run: aws s3 sync public s3://www.nickngn.blog/ --delete
+        run: aws s3 sync public s3://www.nickngn.blog/ --delete --region ap-southeast-1
