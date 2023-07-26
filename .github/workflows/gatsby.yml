@@ -73,11 +73,12 @@ jobs:
         # You may pin to the exact commit or the version.
         # uses: aws-actions/setup-sam@d388945c16af7a5b3da65436576e1c2be088f040
         uses: aws-actions/setup-sam@v2
-      - name: Set AWS access keys
-        run: |
-          export AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
-          export AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          export AWS_DEFAULT_REGION=ap-southeast-1
+      - name: set environment variables
+        uses: allenevans/set-env@v2.0.0
+        with:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-southeast-1
       - name: Upload to AWS S3
         run: |
           pwd
