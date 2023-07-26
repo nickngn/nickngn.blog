@@ -80,7 +80,6 @@ jobs:
           path: ~/app/
       - name: Display structure of downloaded files
         run: ls -R
-        working-directory: ~/app/
       - name: Setup AWS SAM CLI
         # You may pin to the exact commit or the version.
         # uses: aws-actions/setup-sam@d388945c16af7a5b3da65436576e1c2be088f040
