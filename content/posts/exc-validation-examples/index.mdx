@@ -1,0 +1,48 @@
+---
+title: Some ideas for exceptional base validation 
+date: 2023-06-27
+slug: /exceptional-base-validation-examples
+tags:
+  - exceptional-base
+  - validation
+  - tips
+  - java
+---
+
+  > Relying on throwing exceptions when validation failed probably can be an evil.
+  > The key is controlling the scope of the strategy in used.
+
+### Preparation
+
+Given package structure:
+
+``` scss
+validation/
+  ├── Operator        // Main entry to operate other validator's processes
+  ├── ValidatorA    // <package-level>
+  ├── ValidatorB    // <package-level>
+  └── ValidatorC    // <package-level>
+```
+
+and inside Operator file:
+
+``` java title=Operator.java
+
+public class Operator {
+
+  private final ValidatorA validatorA;
+  private final ValidatorB validatorB;
+  private final ValidatorC validatorC;
+  
+  void validate(Foo foo) {
+    try {
+      validatorA.validate(foo);
+      validatorB.validate(foo);
+      validatorC.validate(foo);
+    } catch (ValidationException e) {
+      // handle failed cases
+    }
+  }
+}
+
+```
