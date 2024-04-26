@@ -1,0 +1,100 @@
+
+<h1>title: 5WH questions about automation testing</h1>
+<p>2023-06-14</p>
+<strong>Short but comprehensive answers for automation testing in general</strong>
+<a>#unit-test</a>
+<a>#basic</a>
+<hr>
+<p><img src="https://images.unsplash.com/photo-1512087986463-7e5da30e2707?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=2370&amp;q=80" alt="banner"></p>
+<h2 id="1-why-">1. WHY?</h2>
+<ul>
+<li>Because we don&#39;t want to test all features again every time making changes to the source code.</li>
+<li>Because we want to draw a safe circle before changing something to related source code (fix bugs/add features) so that
+we know we don&#39;t go over that.</li>
+</ul>
+<h2 id="2-what-">2. WHAT?</h2>
+<h3 id="2-1-what-is-automation-testing-">2.1 What is automation testing?</h3>
+<p><code>Who wants to do the same actions after changing every each line of code?</code></p>
+<p>You don&#39;t, I don&#39;t, so leave it to the machine, the machine is fast and reliable if we guide it well.</p>
+<p>That&#39;s it, the automation testing is a list of guidance - each is for checking the correctness of one requirement for our code/business.</p>
+<p>However, depending on the scope, you can choose which type of automation tests. There are:</p>
+<ol>
+<li><p><strong>Unit test</strong>: for <code>a piece of code</code>, sounds not cleared, right? - Yes, because there is no definition for the scope of the unit test,
+it can be a method, a class, a component, or a feature. However, you can understand implicitly when people talk about the unit test:</p>
+<blockquote>
+<p>Unit tests are test cases that are not related to network interactions.
+E.g., Test cases handle requests from the Client (HTTP) or queries to the database (JDBC)</p>
+</blockquote>
+</li>
+<li><p><strong>Integration test</strong>: In addition to the unit test, the integration test is for test cases that need interactions from outside of the application
+or between components.</p>
+</li>
+</ol>
+<p>For example, we want to test if the user sends requests with no existing URL to the server, then the server has to respond using the error 404.</p>
+<p>So why isn&#39;t this case unit test? Because sending an HTTP request often requires the framework and system process, which aren&#39;t under
+control and can encounter unexpected errors.</p>
+<ol>
+<li><strong>System test</strong>: While the Integration test is for simple operation test cases, the System test has more than that. You can test
+with multiple running services/applications simultaneously to try an operation flow (like a feature).</li>
+</ol>
+<p>For example: To test a flow of buying product operation, it usually needs stock service, payment service, and authentication service.</p>
+<ol>
+<li><strong>End-to-end</strong>: To test multiple features as individual users likely need all services running for the extensive system, as well as
+third-party system.</li>
+</ol>
+<p>For example, Payment with a credit card needs a Merchant system, Visa system, Notification system, Bank system, etc.</p>
+<h2 id="3-when-">3. WHEN?</h2>
+<p>When it comes to implementing tests, it&#39;s common for newcomers to think that writing tests takes time and should be done
+after completing the main code. However, this approach is often flawed.
+The timing of test implementation depends on the following tasks:</p>
+<h3 id="3-1-refactoring">3.1 Refactoring</h3>
+<p>It is crucial to write tests before refactoring. Even experienced developers, including Martin Fowler and Uncle Bob,
+emphasize this practice.</p>
+<blockquote>
+<p>I strongly advise you to learn and using refactoring tools, IDEs like IntelliJ
+and Eclipse tools can greatly speed up the process while ensuring accuracy. Features such as Extract method, Rename,
+Inline variable, Inline fields,... - most of the refactoring techniques.</p>
+</blockquote>
+<h3 id="3-2-developing">3.2 Developing</h3>
+<p>For feature implementation, tests can be written either after finishing the code or even before (Test Driven Development approach).</p>
+<h3 id="3-3-fixing-bugs">3.3 Fixing bugs</h3>
+<p>Similar to refactoring, it is recommended to cover related cases with tests.
+Reproducing bugs through failed tests allows for confident bug fixing, ensuring that the issue does not resurface.</p>
+<p>By considering the specific tasks at hand, writing tests at the appropriate times ensures better code quality,
+prevents regressions, and supports efficient development and bug fixing processes.</p>
+<h2 id="4-where-">4. WHERE?</h2>
+<p>This is the project structure I often use for projects:</p>
+<pre><code class="lang-scss">project-root/
+  ├── src/
+  │   ├── main/
+  │   │   ├── java/             (source <span class="hljs-selector-tag">code</span> directory)
+  │   │   │   └── com/
+  │   │   │       └── example/
+  │   │   │           └── MyApp<span class="hljs-selector-class">.java</span>
+  │   │   └── resources/        (resource files directory)
+  │   │       └── application<span class="hljs-selector-class">.properties</span>
+  ├── integration/
+  │   ├── java/                 (integration test source <span class="hljs-selector-tag">code</span> directory)
+  │   │   └── com/
+  │   │       └── example/
+  │   │           └── IntegrationTest<span class="hljs-selector-class">.java</span>
+  │   └── resources/            (integration test resource files directory)
+  │       └── integration<span class="hljs-selector-class">.properties</span>
+  ├── system/
+  │   ├── java/                 (system test source <span class="hljs-selector-tag">code</span> directory)
+  │   │   └── com/
+  │   │       └── example/
+  │   │           └── SystemTest<span class="hljs-selector-class">.java</span>
+  │   └── resources/            (system test resource files directory)
+  │       └── system<span class="hljs-selector-class">.properties</span>
+  ├── pom<span class="hljs-selector-class">.xml</span>                   (project configuration file)
+  ├── target/                   (compiled output directory)
+  └── ...
+(Ft. ChatGPT)
+</code></pre>
+<h2 id="5-how-">5. HOW?</h2>
+<p>Please refer to the below sources for more details:</p>
+<p><a href="/unit-test-with-spring-boot">Unit test with Spring Boot</a></p>
+<p><a href="/integration-test-with-spring-boot">Integration test with Spring Boot</a></p>
+<p><a href="/system-test-with-spring-boot">System test with Spring Boot</a></p>
+<p><a href="/e2e-test-with-cypress">End-to-End test with Cypress</a></p>
