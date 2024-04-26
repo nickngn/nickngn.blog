@@ -1,0 +1,122 @@
+<h1> Exception based &amp; Boolean based validation</h1>
+<p> 2023-04-25</p>
+<p>
+<a>#Java Validation</a>
+<a>#Exception handling</a>
+</p>
+<hr>
+<h2 id="what-is-exception-based-validation-">What is exception based validation?</h2>
+<pre><code class="lang-java"><span class="hljs-keyword">class</span> <span class="hljs-title">SyntaxValidator</span> {
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">validate</span>(<span class="hljs-params">String <span class="hljs-keyword">value</span></span>) </span>{
+        <span class="hljs-keyword">try</span> {
+            checkSyntaxA(<span class="hljs-keyword">value</span>);
+            <span class="hljs-comment">// others</span>
+        } <span class="hljs-keyword">catch</span> (SyntaxException e) {
+            <span class="hljs-comment">// handle exception e</span>
+        }
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">checkSyntaxA</span>(<span class="hljs-params">String <span class="hljs-keyword">value</span></span>) </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">value</span> == <span class="hljs-literal">null</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> SyntaxException(INPUT_NOT_NULL);
+        <span class="hljs-comment">// other logic checks</span>
+    }
+}
+</code></pre>
+<p>Exception based validation is methodology to throw exception each time the happy case condition isn&#39;t met.
+It relies on higher level caller to know and handle it for them.</p>
+<p>In the real life. it&#39;s like: the travel agent asks you to fill the form, and when you fill something incorrectly, you
+tell the agent about that, so that the agent can handle it for you.</p>
+<h2 id="what-is-boolean-based-validation-">What is boolean based validation?</h2>
+<pre><code class="lang-java"><span class="hljs-keyword">class</span> <span class="hljs-title">SyntaxValidator</span> {
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">validate</span>(<span class="hljs-params">String <span class="hljs-keyword">value</span></span>) </span>{
+        <span class="hljs-keyword">if</span> (!checkSyntaxA(<span class="hljs-keyword">value</span>)) {
+            <span class="hljs-comment">// do something</span>
+        };
+        <span class="hljs-comment">// others</span>
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">private</span> boolean <span class="hljs-title">checkSyntaxA</span>(<span class="hljs-params">String <span class="hljs-keyword">value</span></span>) </span>{
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">value</span> == <span class="hljs-literal">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+        <span class="hljs-comment">// other logic checks</span>
+    }
+}
+</code></pre>
+<p>Boolean based validation is methodology to return boolean: true if all checks in method is valid, and vice versus.</p>
+<h2 id="how-to-use-">How to use?</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Exception-based</th>
+<th>Boolean-based</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>When caller know result?</td>
+<td>Immediately when the condition failed</td>
+<td>Controllable to return immediately or in the end of function</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>Lower slightly</td>
+<td>Higher slightly</td>
+</tr>
+<tr>
+<td>Readability</td>
+<td>Well-through</td>
+<td>Multiple if-else continuously</td>
+</tr>
+</tbody>
+</table>
+<h3 id="when-to-use-">When to use?</h3>
+<p>It is normally suggested to not use Exception based validation commonly in your code, instead of it, it&#39;s better to use
+boolean-based solution because it&#39;s safer to use commonly and work correctly in all areas of your project.
+Although you have to pay with a bit of readability but the conditions are easy to modify.</p>
+<p>On the other hand, exception-based solution can enhance the flow and shorten code, but if you don&#39;t wrap method carefully
+then the container class will be a mess.</p>
+<p>However, everything has its correct way for its correct moment, I do believe in that. <br/>
+As my experiment, Exception-based is
+good to use when you need a big validation module (a validator class / a package for validating), so that you can have a
+natural wrapper (class/package) and there is only limited number of ports (public validation methods), that mean except
+allowed ports, you have to set all modifiers for others to be default or private.</p>
+<h2 id="extension-notification-based">Extension: Notification based</h2>
+<p>The idea to wrap the error detail in the object and return.</p>
+<pre><code class="lang-java"><span class="hljs-keyword">import</span> java.util.ArrayList;
+<span class="hljs-keyword">import</span> java.util.Arrays;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ValidationResult</span> </span>{
+    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> List&lt;String&gt; errorList = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">addErrors</span><span class="hljs-params">(String... errors)</span> </span>{
+        errorList.addAll(Arrays.asList(errors));
+    }
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">addErrors</span><span class="hljs-params">(ValidationResult result)</span> </span>{
+        errorList.addAll(result.errorList);
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">hasErrors</span><span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> !errorList.isEmpty(); }
+}
+</code></pre>
+<p>And how to use it:</p>
+<pre><code class="lang-java"><span class="hljs-keyword">class</span> <span class="hljs-title">SyntaxValidator</span> {
+
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">validate</span>(<span class="hljs-params">String <span class="hljs-keyword">value</span></span>) </span>{
+        <span class="hljs-keyword">if</span> (checkSyntaxA(<span class="hljs-keyword">value</span>).hasErrors()) {
+            <span class="hljs-comment">// do something</span>
+        };
+        <span class="hljs-comment">// others</span>
+    }
+
+    <span class="hljs-function"><span class="hljs-keyword">private</span> boolean <span class="hljs-title">checkSyntaxA</span>(<span class="hljs-params">String <span class="hljs-keyword">value</span></span>) </span>{
+        ValidationResult result = <span class="hljs-keyword">new</span> ValidationResult();
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">value</span> == <span class="hljs-literal">null</span>) result.addErrors(INPUT_NOT_NULL);
+        <span class="hljs-comment">// other logic checks</span>
+        <span class="hljs-keyword">return</span> result;
+    }
+}
+</code></pre>
+<h2 id="reference">Reference</h2>
+<p><a href="https://martinfowler.com/articles/replaceThrowWithNotification.html">Refactoring Ugly exception based with Notifications</a></p>
