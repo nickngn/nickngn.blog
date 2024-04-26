@@ -20,12 +20,12 @@ The key is controlling the scope of the strategy in used.</p>
   └── ValidatorC    // &lt;<span class="hljs-keyword">package</span>-level&gt;
 </code></pre>
 <p>and inside Operator file:</p>
-<p>``` java title=Operator.java</p>
-<p>public class Operator {</p>
-<p>  private final ValidatorA validatorA;
+<pre><code class="lang-scss">
+public class Operator {
+  private final ValidatorA validatorA;
   private final ValidatorB validatorB;
-  private final ValidatorC validatorC;</p>
-<p>  void validate(Foo foo) {
+  private final ValidatorC validatorC;
+  void validate(Foo foo) {
     try {
       validatorA.validate(foo);
       validatorB.validate(foo);
@@ -34,5 +34,5 @@ The key is controlling the scope of the strategy in used.</p>
       // handle failed cases
     }
   }
-}</p>
-<p>```</p>
+}
+</code></pre>
