@@ -1,0 +1,52 @@
+<h1>Using AssertJ to assert audited timestamp</h1>
+<p>2023-06-26</p>
+<p>
+  <a>assertj</a>
+  <a>timestamp</a>
+  <a>assert</a>
+</p>
+
+<hr>
+<p>Most of the applications have date time fields created at the moment the code flow run through, so that we can&#39;t
+pre-calculate the expected datetime in the Unit Tests.</p>
+<p>Given a method:</p>
+<pre>public A foo() {
+    A a = new A();
+    // do something
+    a.setCreatedDateTime(LocalDateTime.now());
+    a.setLastUpdatedDateTime(LocalDateTime.now());
+    return a;
+}
+</pre>
+<p>So how do we test the date time?</p>
+<pre><code class="lang-java">@Test
+void testFooAuditedDateTime<span class="hljs-comment">()</span> {
+    <span class="hljs-comment">// Given</span>
+
+    <span class="hljs-comment">// When</span>
+    A a = foo<span class="hljs-comment">()</span>;
+
+    <span class="hljs-comment">//Then</span>
+    assertThat<span class="hljs-comment">(a.getCreatedDateTime()</span>).isEqualTo<span class="hljs-comment">(/* something */)</span>;
+    assertThat<span class="hljs-comment">(a.getLastUpdatedDateTime()</span>).isEqualTo<span class="hljs-comment">(/* something */)</span>;
+}
+</code></pre>
+<p>Those will be failed, of course.</p>
+<p>Actually, there is no way can we have the exactly expectation of those date time fields. Nonetheless, AssertJ provides us
+an API to deal with this case: use approximately datetime - a close moment instead, and that&#39;s enough for 99% cases.</p>
+<p>We can do it like:</p>
+<pre><code class="lang-java">@Test
+void testFooAuditedDateTime<span class="hljs-comment">()</span> {
+    <span class="hljs-comment">// Given</span>
+
+    <span class="hljs-comment">// When</span>
+    A a = foo<span class="hljs-comment">()</span>;
+
+    <span class="hljs-comment">//Then</span>
+    assertThat<span class="hljs-comment">(a.getCreatedDateTime()</span>).isCloseTo<span class="hljs-comment">(new Date()</span>, <span class="hljs-number">100</span>);
+    assertThat<span class="hljs-comment">(a.getLastUpdatedDateTime()</span>).isCloseTo<span class="hljs-comment">(new Date()</span>, <span class="hljs-number">100</span>);
+}
+</code></pre>
+<p>Those assertions mean the date time initiated with value closed to the moment which are checked and not over 100 ms.</p>
+<p>Besides, AssertJ also provide plenty of other APIs for date assertions as well. See more in:</p>
+<p><a href="http://joel-costigliola.github.io/assertj/core-8/api/index.html">AbstractDateAssert JavaDoc</a></p>
