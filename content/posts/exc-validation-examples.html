@@ -1,0 +1,38 @@
+<h1> Some ideas for exceptional base validation </h1>
+<p>2023-06-27</p>
+<p>
+<a>#exceptional-base</a>
+<a>#validation</a>
+<a>#tips</a>
+<a>#java</a>
+</p>
+<hr>
+<blockquote>
+<p>Relying on throwing exceptions when validation failed probably can be an evil.
+The key is controlling the scope of the strategy in used.</p>
+</blockquote>
+<h3 id="preparation">Preparation</h3>
+<p>Given package structure:</p>
+<pre><code class="lang-scss">validation/
+  ├── Operator        // Main <span class="hljs-keyword">entry</span> to operate other validator<span class="hljs-symbol">'s</span> processes
+  ├── ValidatorA    // &lt;<span class="hljs-keyword">package</span>-level&gt;
+  ├── ValidatorB    // &lt;<span class="hljs-keyword">package</span>-level&gt;
+  └── ValidatorC    // &lt;<span class="hljs-keyword">package</span>-level&gt;
+</code></pre>
+<p>and inside Operator file:</p>
+<p>``` java title=Operator.java</p>
+<p>public class Operator {</p>
+<p>  private final ValidatorA validatorA;
+  private final ValidatorB validatorB;
+  private final ValidatorC validatorC;</p>
+<p>  void validate(Foo foo) {
+    try {
+      validatorA.validate(foo);
+      validatorB.validate(foo);
+      validatorC.validate(foo);
+    } catch (ValidationException e) {
+      // handle failed cases
+    }
+  }
+}</p>
+<p>```</p>
