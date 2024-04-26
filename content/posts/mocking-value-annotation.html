@@ -8,24 +8,23 @@
 </p>
 <hr>
 <h3 id="dependencies">Dependencies</h3>
-<pre>
+<pre><code>
 <dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring-context</artifactId>
     <version>5.1.2.RELEASE</version>
 </dependency>
 
-<p><dependency>
+<dependency>
     <groupId>org.springframework</groupId>
     <artifactId>spring-test</artifactId>
     <version>5.1.2.RELEASE</version>
     <scope>test</scope>
 </dependency>
-  </pre>
-<pre><code>### How to mock?
+</code></pre>
+<h5>How to mock?</h5> 
 Given <span class="hljs-keyword">this</span> code:
-
-```java withLineNumbers title=Foo.java
+<pre><code>
 <span class="hljs-meta">@Component</span>
 <span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span> </span>{
 
