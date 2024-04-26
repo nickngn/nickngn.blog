@@ -1,0 +1,64 @@
+<h1>How to mock @Value in Spring Boot tests</h1>
+<p>2023-06-22</p>
+<p>
+<a>#unit-test</a>
+<a>#spring-boot</a>
+<a>#mocking</a>
+<a>#annotation</a>
+</p>
+<hr>
+<h3 id="dependencies">Dependencies</h3>
+<pre>
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>5.1.2.RELEASE</version>
+</dependency>
+
+<p><dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-test</artifactId>
+    <version>5.1.2.RELEASE</version>
+    <scope>test</scope>
+</dependency>
+  </pre>
+<pre><code>### How to mock?
+Given <span class="hljs-keyword">this</span> code:
+
+```java withLineNumbers title=Foo.java
+<span class="hljs-meta">@Component</span>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span> </span>{
+
+    <span class="hljs-meta">@Value(<span class="hljs-meta-string">"<span class="hljs-subst">${field-value}</span>"</span>)</span>
+    <span class="hljs-keyword">private</span> boolean field;
+
+    <span class="hljs-keyword">public</span> void methodThatUsesField() {
+        <span class="hljs-keyword">if</span> (field) {
+            <span class="hljs-comment">// something running here</span>
+        }
+    }
+}
+</code></pre><p><strong>So how do you want to mock it?</strong></p>
+<p>Instead of changing values in the application.properties or vice versus... We can just use <code>ReflectionTestUtils</code>:</p>
+<pre>
+<p>```java highlight=12 withLineNumbers  title=FooTest.java
+import org.springframework.test.util.ReflectionTestUtils;</p>
+<p>@SpringBootTest
+class FooTest {</p>
+<pre><code><span class="hljs-meta">@Autowired</span>
+<span class="hljs-keyword">private</span> Foo foo;
+
+<span class="hljs-meta">@Test</span>
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">testMethodThatUsesField</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">// Given</span>
+    ReflectionTestUtils.setField(Foo, <span class="hljs-string">"field"</span>, value);
+
+    <span class="hljs-comment">// When</span>
+    foo.methodThatUsesField();
+
+    <span class="hljs-comment">// Then</span>
+    <span class="hljs-comment">// assertions</span>
+}
+</code></pre><p>}
+</pre>
+<p>Read more in <a href="https://www.baeldung.com/spring-reflection-test-utils">ReflectionTestUtils</a></p>
