@@ -6,58 +6,57 @@
 <a>#mocking</a>
 <a>#annotation</a>
 </p>
-<hr>
+
 <h3 id="dependencies">Dependencies</h3>
-<pre><code>
-<dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-context</artifactId>
-    <version>5.1.2.RELEASE</version>
-</dependency>
+<pre><code class="language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+    &lt;version&gt;5.1.2.RELEASE&lt;/version&gt;
+&lt;/dependency&gt;
 
-<dependency>
-    <groupId>org.springframework</groupId>
-    <artifactId>spring-test</artifactId>
-    <version>5.1.2.RELEASE</version>
-    <scope>test</scope>
-</dependency>
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-test&lt;/artifactId&gt;
+    &lt;version&gt;5.1.2.RELEASE&lt;/version&gt;
+    &lt;scope&gt;test&lt;/scope&gt;
+&lt;/dependency&gt;
 </code></pre>
-<h5>How to mock?</h5> 
-Given <span class="hljs-keyword">this</span> code:
-<pre><code>
-<span class="hljs-meta">@Component</span>
-<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Foo</span> </span>{
+<h3 id="how-to-mock">How to mock?</h3>
+<p>Given this code:</p>
+<pre><code class="language-java">@Component
+public class Foo {
 
-    <span class="hljs-meta">@Value(<span class="hljs-meta-string">"<span class="hljs-subst">${field-value}</span>"</span>)</span>
-    <span class="hljs-keyword">private</span> boolean field;
+    @Value(&quot;${field-value}&quot;)
+    private boolean field;
 
-    <span class="hljs-keyword">public</span> void methodThatUsesField() {
-        <span class="hljs-keyword">if</span> (field) {
-            <span class="hljs-comment">// something running here</span>
+    public void methodThatUsesField() {
+        if (field) {
+            // something running here
         }
     }
 }
-</code></pre><p><strong>So how do you want to mock it?</strong></p>
+</code></pre>
+<p><strong>So how do you want to mock it?</strong></p>
 <p>Instead of changing values in the application.properties or vice versus... We can just use <code>ReflectionTestUtils</code>:</p>
-<pre>
-<p>```java highlight=12 withLineNumbers  title=FooTest.java
-import org.springframework.test.util.ReflectionTestUtils;</p>
-<p>@SpringBootTest
-class FooTest {</p>
-<pre><code><span class="hljs-meta">@Autowired</span>
-<span class="hljs-keyword">private</span> Foo foo;
+<pre><code class="language-java">import org.springframework.test.util.ReflectionTestUtils;
 
-<span class="hljs-meta">@Test</span>
-<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">testMethodThatUsesField</span><span class="hljs-params">()</span> </span>{
-    <span class="hljs-comment">// Given</span>
-    ReflectionTestUtils.setField(Foo, <span class="hljs-string">"field"</span>, value);
+@SpringBootTest
+class FooTest {
 
-    <span class="hljs-comment">// When</span>
-    foo.methodThatUsesField();
+    @Autowired
+    private Foo foo;
 
-    <span class="hljs-comment">// Then</span>
-    <span class="hljs-comment">// assertions</span>
+    @Test
+    void testMethodThatUsesField() {
+        // Given
+        ReflectionTestUtils.setField(Foo, &quot;field&quot;, value);
+
+        // When
+        foo.methodThatUsesField();
+
+        // Then
+        // assertions
+    }
 }
-</code></pre><p>}
-</pre>
+</code></pre>
 <p>Read more in <a href="https://www.baeldung.com/spring-reflection-test-utils">ReflectionTestUtils</a></p>
